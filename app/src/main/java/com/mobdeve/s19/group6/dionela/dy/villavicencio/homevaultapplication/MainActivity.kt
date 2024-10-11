@@ -6,8 +6,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var itemAdapter: ItemAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -17,6 +23,22 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        window.statusBarColor = Color.parseColor("#4d5d80");
+        window.statusBarColor = Color.parseColor("#4d5d80")
+
+        recyclerView = findViewById(R.id.recyclerView2)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        val items = listOf(
+            Item(R.drawable.item1, "Eggs", "Brand: Bounty Fresh", "Poultry", "In Stock: 10"),
+            Item(R.drawable.item2, "Tissue Paper", "Brand: Sanicare", "Sanitary", "In Stock: 3"),
+            Item(R.drawable.item3, "Onions", "Brand:", "Produce", "In Stock: 6"),
+            Item(R.drawable.item4, "Smart TV", "Brand: Samsung", "Appliance", "In Stock: 1"),
+            Item(R.drawable.item5, "PS5", "Brand: Sony", "Electronics", "In Stock: 1"),
+            Item(R.drawable.item6, "Rice", "Brand: Dona Maria", "Grains", "In Stock: 5kg"),
+            Item(R.drawable.item7, "Ice Cream", "Brand: Ben & Jerry's", "Dairy", "In Stock: 1")
+        )
+
+        itemAdapter = ItemAdapter(items)
+        recyclerView.adapter = itemAdapter
     }
 }

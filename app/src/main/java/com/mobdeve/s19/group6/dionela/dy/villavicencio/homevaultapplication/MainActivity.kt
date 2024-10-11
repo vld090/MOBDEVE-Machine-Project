@@ -29,13 +29,13 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         val items = listOf(
-            Item(R.drawable.item1, "Eggs", "Brand: Bounty Fresh", "Poultry", "In Stock: 10"),
-            Item(R.drawable.item2, "Tissue Paper", "Brand: Sanicare", "Sanitary", "In Stock: 3"),
-            Item(R.drawable.item3, "Onions", "Brand:", "Produce", "In Stock: 6"),
-            Item(R.drawable.item4, "Smart TV", "Brand: Samsung", "Appliance", "In Stock: 1"),
-            Item(R.drawable.item5, "PS5", "Brand: Sony", "Electronics", "In Stock: 1"),
-            Item(R.drawable.item6, "Rice", "Brand: Dona Maria", "Grains", "In Stock: 5kg"),
-            Item(R.drawable.item7, "Ice Cream", "Brand: Ben & Jerry's", "Dairy", "In Stock: 1")
+            Item(R.drawable.item1, "Eggs", "Brand: Bounty Fresh", "Category: Poultry", "In Stock: 10"),
+            Item(R.drawable.item2, "Tissue Paper", "Brand: Sanicare", "Category: Sanitary", "In Stock: 3"),
+            Item(R.drawable.item3, "Onions", "Brand:", "Category: Produce", "In Stock: 6"),
+            Item(R.drawable.item4, "Smart TV", "Brand: Samsung", "Category: Appliance", "In Stock: 1"),
+            Item(R.drawable.item5, "PS5", "Brand: Sony", "Category: Electronics", "In Stock: 1"),
+            Item(R.drawable.item6, "Rice", "Brand: Dona Maria", "Category: Grains", "In Stock: 5kg"),
+            Item(R.drawable.item7, "Ice Cream", "Brand: Ben & Jerry's", "Category: Dairy", "In Stock: 1")
         )
 
         itemAdapter = ItemAdapter(items)

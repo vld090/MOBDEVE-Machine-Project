@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/iHome"
+        android:title="Home"
+        android:icon="@drawable/ic_home"/>
+
+    <item
+        android:id="@+id/iWallet"
+        android:title="Wallet"
+        android:icon="@drawable/ic_wallet"/>
+
+    <item
+        android:id="@+id/iNotifs"
+        android:title="Notification"
+        android:icon="@drawable/ic_notification"/>
+
+    <item
+        android:id="@+id/iHistory"
+        android:title="History"
+        android:icon="@drawable/ic_history"/>
+</menu>

@@ -85,13 +85,23 @@
         app:layout_constraintLeft_toLeftOf="parent"/>
 
     <FrameLayout
+        android:id="@+id/flBotNav"
         android:layout_width="match_parent"
-        android:layout_height="46dp"
-        android:background="#4D5D80"
+        android:layout_height="0dp"
+        android:background="@color/main"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+    
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:menu="@menu/bottom_nav"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="0dp">
-
-    </FrameLayout>
-
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:background="@color/main"
+        app:itemIconTint="@color/white"
+        app:itemTextColor="@color/white"
+        app:itemIconSize="24dp"
+        app:labelVisibilityMode="labeled"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

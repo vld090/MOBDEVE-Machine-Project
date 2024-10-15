@@ -7,7 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class ItemAdapter(private val items: List<Item>) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
+class ItemAdapter(private val items: List<CatalogItem>) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
 
     inner class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val itemImage: ImageView = view.findViewById(R.id.ivItemPic)
@@ -16,7 +16,7 @@ class ItemAdapter(private val items: List<Item>) : RecyclerView.Adapter<ItemAdap
         private val itemCategory: TextView = view.findViewById(R.id.tvCategory)
         private val itemStock: TextView = view.findViewById(R.id.tvStock)
 
-        fun bind(item: Item) {
+        fun bind(item: CatalogItem) {
             itemImage.setImageResource(item.imageResId)
             itemName.text = item.itemName
             itemBrand.text = item.brand

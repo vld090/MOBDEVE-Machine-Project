@@ -7,6 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import android.widget.Button
+import android.widget.ImageButton
+
+
 
 
 class Home : Fragment() {
@@ -41,5 +45,15 @@ class Home : Fragment() {
 
         itemAdapter = ItemAdapter(items)
         recyclerView.adapter = itemAdapter
+
+        val newItemBtn = view.findViewById<ImageButton>(R.id.newItemBtn)
+        newItemBtn.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.flMainPage, NewItemFragment())
+                .addToBackStack(null)  // Optional, if you want to allow users to navigate back
+                .commit()
+        }
     }
+
+
 }

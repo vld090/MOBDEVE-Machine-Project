@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="category_array">
+        <item>Poultry</item>
+        <item>Sanitary</item>
+        <item>Produce</item>
+        <item>Appliance</item>
+        <item>Electronics</item>
+        <item>Grains</item>
+        <item>Dairy</item>
+    </string-array>
+</resources>

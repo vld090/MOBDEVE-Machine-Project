@@ -51,5 +51,3 @@ class MainActivity : AppCompatActivity() {
         fragTransaction.commit()
     }
 }
-
-//test for git

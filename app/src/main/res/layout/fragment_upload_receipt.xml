@@ -1,41 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:backgroundTint="#FFFFFF"
+    android:backgroundTintMode="add">
 
-    <EditText
-        android:id="@+id/etReceiptName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Receipt Name"/>
-
-    <EditText
-        android:id="@+id/etReceiptAmount"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Amount"
-        android:inputType="numberDecimal"/>
-
-    <Button
-        android:id="@+id/btnChooseImage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Choose Image"/>
+    <TextView
+        android:id="@+id/titleBarCL"
+        android:layout_width="260dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/button_background"
+        android:backgroundTint="@color/main"
+        android:fontFamily="@font/poppins_bold"
+        android:gravity="top"
+        android:hapticFeedbackEnabled="false"
+        android:text="Add Receipt"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        app:layout_constraintEnd_toEndOf="@+id/linearLayout2"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <ImageView
-        android:id="@+id/ivReceiptImage"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:contentDescription="Selected receipt image"
-        android:scaleType="centerCrop"/>
+        android:id="@+id/ivShapeAccent"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="-55dp"
+        android:src="@drawable/droplet"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/main" />
 
-    <Button
-        android:id="@+id/btnSubmitReceipt"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Submit Receipt"/>
+    <ImageButton
+        android:id="@+id/ibBackBtn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/back_button"
+        app:layout_constraintHorizontal_bias="0.125"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="@id/ivShapeAccent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="350dp"
+        android:layout_height="400dp"
+        android:layout_marginTop="80dp"
+        android:background="@drawable/search_view_background"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.415">
 
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/search_view_background"
+            android:orientation="vertical">
+
+
+            <ImageButton
+                android:id="@+id/ivReceiptImage"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                app:srcCompat="@android:drawable/ic_menu_gallery" />
+
+            <TextView
+                android:id="@+id/btnChooseImage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="Add Image +"
+                android:textAlignment="center"
+                android:clickable="true"
+                android:focusable="true" />
+
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/etReceiptName"
+            android:layout_width="290dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/search_view_background"
+            android:hint=" Receipt Name"
+            android:inputType="text" />
+
+        <LinearLayout
+            android:layout_width="290dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/search_view_background"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=" Item Associated" />
+
+            <Spinner
+                android:id="@+id/spinnerItemAssociated"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/category_array"
+                android:hint="Item Associated" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/etReceiptAmount"
+            android:layout_width="290dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/search_view_background"
+            android:hint=" Amount"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/etDatePurchased"
+            android:layout_width="290dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/search_view_background"
+            android:hint=" Date Purchased"
+            android:inputType="number" />
+
+        <Button
+            android:id="@+id/btnSubmitItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/main"
+            android:fontFamily="@font/poppins_bold"
+            android:text="Enter" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

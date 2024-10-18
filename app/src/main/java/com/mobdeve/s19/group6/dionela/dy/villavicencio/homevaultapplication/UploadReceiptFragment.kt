@@ -8,11 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Button
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 
 class UploadReceiptFragment : Fragment() {
 
     private lateinit var imageView: ImageView
+    private lateinit var spinner: Spinner
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -20,9 +24,23 @@ class UploadReceiptFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_upload_receipt, container, false)
         imageView = view.findViewById(R.id.ivReceiptImage)
-        view.findViewById<Button>(R.id.btnChooseImage).setOnClickListener {
+        spinner = view.findViewById(R.id.spinnerItemAssociated)
+
+        // Manually adding the items to the spinner
+        val itemNames = listOf("Eggs", "Tissue Paper", "Onions", "Smart TV", "PS5", "Rice", "Ice Cream")
+
+        // Set up the spinner with item names
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, itemNames)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = adapter
+
+        val textViewButton = view.findViewById<TextView>(R.id.btnChooseImage)
+        textViewButton.setOnClickListener {
+            // Perform button action, e.g., open image selector
             openImageSelector()
         }
+
+
         return view
     }
 
@@ -45,4 +63,3 @@ class UploadReceiptFragment : Fragment() {
         private const val IMAGE_PICK_CODE = 1001
     }
 }
-

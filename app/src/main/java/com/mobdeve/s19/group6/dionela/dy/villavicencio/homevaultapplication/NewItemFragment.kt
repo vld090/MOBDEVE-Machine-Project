@@ -26,6 +26,13 @@ class NewItemFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupCategoryDropdown()
 
+        binding.textView.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.flMainPage, CameraFragment())
+                .addToBackStack(null) // Allows you to go back
+                .commit()
+        }
+
         binding.btnSubmitItem.setOnClickListener {
             // Here you might handle the data insertion
             Toast.makeText(context, "Item added!", Toast.LENGTH_SHORT).show()

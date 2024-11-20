@@ -37,18 +37,21 @@ class UploadReceiptFragment : Fragment() {
         val textViewButton = view.findViewById<TextView>(R.id.btnChooseImage)
         textViewButton.setOnClickListener {
             // Perform button action, e.g., open image selector
-            openImageSelector()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.flMainPage, CameraFragment())
+                .addToBackStack(null) // Allows you to go back
+                .commit()
         }
 
 
         return view
     }
 
-    private fun openImageSelector() {
-        val intent = Intent(Intent.ACTION_PICK)
-        intent.type = "image/*"
-        startActivityForResult(intent, IMAGE_PICK_CODE)
-    }
+//    private fun openImageSelector() {
+//        val intent = Intent(Intent.ACTION_PICK)
+//        intent.type = "image/*"
+//        startActivityForResult(intent, IMAGE_PICK_CODE)
+//    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

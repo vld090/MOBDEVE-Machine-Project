@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.mobdeve.s19.group6.dionela.dy.villavicencio.homevaultapplication.databinding.FragmentNewItemBinding
-import android.widget.Toast
 
 class NewItemFragment : Fragment() {
 
@@ -29,14 +29,31 @@ class NewItemFragment : Fragment() {
         binding.textView.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .replace(R.id.flMainPage, CameraFragment())
-                .addToBackStack(null) // Allows you to go back
+                .addToBackStack(null)
                 .commit()
         }
 
         binding.btnSubmitItem.setOnClickListener {
-            // Here you might handle the data insertion
-            Toast.makeText(context, "Item added!", Toast.LENGTH_SHORT).show()
-            // Navigate back or clear the form
+            val itemName = binding.editItemName.text.toString().trim()
+            val brand = binding.editBrand.text.toString().trim()
+            val category = binding.spinnerCategory.selectedItem.toString()
+            val stock = binding.editStock.text.toString().trim()
+
+            if (itemName.isEmpty() || stock.isEmpty()) {
+                Toast.makeText(context, "Please fill out all required fields.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val newItem = CatalogItem(0, itemName, brand, category, stock)
+            val dbHelper = DatabaseHelper(requireContext())
+            val result = dbHelper.addItem(newItem)
+
+            if (result != -1L) {
+                Toast.makeText(context, "Item added successfully!", Toast.LENGTH_SHORT).show()
+                parentFragmentManager.popBackStack()
+            } else {
+                Toast.makeText(context, "Failed to add item.", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

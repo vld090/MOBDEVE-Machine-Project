@@ -28,11 +28,10 @@ class Home : Fragment() {
         recyclerView = view.findViewById(R.id.recyclerView2)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        // Load items from database
-        val dbHelper = DatabaseHelper(requireContext())
-        val items = dbHelper.getAllItems()
+        val dbHelper = DatabaseHelper(requireContext()) // Initialize DatabaseHelper
+        val items = dbHelper.getAllItems().toMutableList() // Get mutable list of items
 
-        itemAdapter = ItemAdapter(items)
+        itemAdapter = ItemAdapter(items, dbHelper) // Pass DatabaseHelper to the adapter
         recyclerView.adapter = itemAdapter
 
         val newItemBtn = view.findViewById<ImageButton>(R.id.newItemBtn)

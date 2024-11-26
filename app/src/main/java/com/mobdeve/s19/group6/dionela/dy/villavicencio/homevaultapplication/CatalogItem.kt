@@ -5,5 +5,5 @@ data class CatalogItem(
     val itemName: String,
     val brand: String,
     val category: String,
-    val stock: String
+    var stock: String
 )

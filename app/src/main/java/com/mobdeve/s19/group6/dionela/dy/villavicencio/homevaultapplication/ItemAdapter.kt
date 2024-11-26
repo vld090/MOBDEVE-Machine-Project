@@ -3,14 +3,11 @@ package com.mobdeve.s19.group6.dionela.dy.villavicencio.homevaultapplication
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.PopupMenu
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 
 class ItemAdapter(
-    private val items: MutableList<CatalogItem>, // Mutable list to allow item removal
+    private val items: MutableList<CatalogItem>, // Mutable list to allow item modification
     private val dbHelper: DatabaseHelper // Pass DatabaseHelper for operations
 ) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
 
@@ -21,16 +18,54 @@ class ItemAdapter(
         private val itemCategory: TextView = view.findViewById(R.id.tvCategory)
         private val itemStock: TextView = view.findViewById(R.id.tvStock)
         private val editDeleteMenu: ImageView = view.findViewById(R.id.ivEditDelete)
+        private val btnAdd: Button = view.findViewById(R.id.btnAdd) // Add button
+        private val btnDeduct: Button = view.findViewById(R.id.btnDeduct) // Deduct button
 
         fun bind(item: CatalogItem) {
-            itemImage.setImageResource(item.imageResId) // Set item image
+            itemImage.setImageResource(item.imageResId)
             itemName.text = item.itemName
             itemBrand.text = item.brand ?: "No Brand"
             itemCategory.text = item.category
             itemStock.text = item.stock
 
+            // Set up Add and Deduct buttons
+            btnAdd.setOnClickListener { incrementStock(item) }
+            btnDeduct.setOnClickListener { decrementStock(item) }
+
             // Set up dropdown menu
             editDeleteMenu.setOnClickListener { showPopupMenu(it, item) }
+        }
+
+        private fun incrementStock(item: CatalogItem) {
+            val currentStock = item.stock.toInt()
+            val newStock = currentStock + 1
+
+            val result = dbHelper.updateStock(item.itemName, newStock)
+            if (result > 0) {
+                item.stock = newStock.toString() // Update the local item
+                itemStock.text = newStock.toString() // Reflect the change in UI
+                Toast.makeText(itemView.context, "Stock added!", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(itemView.context, "Failed to update stock.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        private fun decrementStock(item: CatalogItem) {
+            val currentStock = item.stock.toInt()
+            if (currentStock > 0) {
+                val newStock = currentStock - 1
+
+                val result = dbHelper.updateStock(item.itemName, newStock)
+                if (result > 0) {
+                    item.stock = newStock.toString() // Update the local item
+                    itemStock.text = newStock.toString() // Reflect the change in UI
+                    Toast.makeText(itemView.context, "Stock deducted!", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(itemView.context, "Failed to update stock.", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(itemView.context, "Stock cannot be less than zero.", Toast.LENGTH_SHORT).show()
+            }
         }
 
         private fun showPopupMenu(view: View, item: CatalogItem) {

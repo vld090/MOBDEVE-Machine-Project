@@ -74,4 +74,15 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         return result
     }
 
+    fun updateStock(itemName: String, newStock: Int): Int {
+        val db = this.writableDatabase
+        val values = ContentValues().apply {
+            put(COLUMN_STOCK, newStock.toString())
+        }
+        val rowsUpdated = db.update(TABLE_NAME, values, "$COLUMN_ITEM_NAME = ?", arrayOf(itemName))
+        db.close()
+        return rowsUpdated
+    }
+
+
 }

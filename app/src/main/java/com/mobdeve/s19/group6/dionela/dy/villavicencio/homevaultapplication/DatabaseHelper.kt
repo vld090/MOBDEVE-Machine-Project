@@ -84,5 +84,33 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         return rowsUpdated
     }
 
+    fun searchItemsByName(query: String): List<CatalogItem> {
+        val items = mutableListOf<CatalogItem>()
+        val db = this.readableDatabase
+
+        val cursor = db.query(
+            TABLE_NAME,
+            null, // Select all columns
+            "$COLUMN_ITEM_NAME LIKE ?", // WHERE clause
+            arrayOf("%$query%"), // Argument for the LIKE clause
+            null,
+            null,
+            null
+        )
+
+        if (cursor.moveToFirst()) {
+            do {
+                val itemName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ITEM_NAME))
+                val brand = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_BRAND))
+                val category = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CATEGORY))
+                val stock = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_STOCK))
+                items.add(CatalogItem(0, itemName, brand, category, stock)) // Placeholder for imageResId
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+        return items
+    }
 
 }

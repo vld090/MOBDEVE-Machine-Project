@@ -61,7 +61,7 @@
         app:layout_constraintTop_toBottomOf="@+id/ivLineAccent"/>
 
     <TextView
-        android:id="@+id/tvSortBy"
+        android:id="@+id/tvSortByLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="end"
@@ -76,8 +76,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/drop_down_arrow"
-        app:layout_constraintLeft_toRightOf="@id/tvSortBy"
-        app:layout_constraintTop_toTopOf="@id/tvSortBy"/>
+        app:layout_constraintLeft_toRightOf="@id/tvSortByLabel"
+        app:layout_constraintTop_toTopOf="@id/tvSortByLabel"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvNotifItem"

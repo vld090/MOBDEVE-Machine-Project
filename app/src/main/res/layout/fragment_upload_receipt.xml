@@ -129,14 +129,24 @@
         </LinearLayout>
 
         <EditText
-            android:id="@+id/etExpiryDate"
+            android:id="@+id/etReceiptAmount"
             android:layout_width="290dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:background="@drawable/search_view_background"
-            android:hint="Expiry Date"
-            android:inputType="date" />
+            android:hint=" Amount"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/etDatePurchased"
+            android:layout_width="290dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/search_view_background"
+            android:hint=" Date Purchased"
+            android:inputType="number" />
 
         <Button
             android:id="@+id/btnSubmitItem"

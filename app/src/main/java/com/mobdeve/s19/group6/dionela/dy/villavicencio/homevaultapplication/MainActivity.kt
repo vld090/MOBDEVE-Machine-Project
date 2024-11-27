@@ -2,7 +2,6 @@ package com.mobdeve.s19.group6.dionela.dy.villavicencio.homevaultapplication
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -10,8 +9,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.mobdeve.s19.group6.dionela.dy.villavicencio.homevaultapplication.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -42,7 +39,7 @@ class MainActivity : AppCompatActivity() {
 
         if(!hasPermission()) {
             ActivityCompat.requestPermissions(
-                this, cameraX_permission, 0
+                this, required_permission, 0
             )
         }
 
@@ -54,13 +51,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        private val cameraX_permission = arrayOf(
-            Manifest.permission.CAMERA
+        private val required_permission = arrayOf(
+            Manifest.permission.CAMERA,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
         )
     }
 
     private fun hasPermission(): Boolean {
-        return cameraX_permission.all {
+        return required_permission.all {
             ContextCompat.checkSelfPermission(
                 applicationContext,
                 it

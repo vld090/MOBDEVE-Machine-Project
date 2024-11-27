@@ -1,5 +1,6 @@
 package com.mobdeve.s19.group6.dionela.dy.villavicencio.homevaultapplication
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -26,6 +27,14 @@ class NewItemFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupCategoryDropdown()
 
+        parentFragmentManager.setFragmentResultListener("camera_result", viewLifecycleOwner) { _, bundle ->
+            val imageUri = bundle.getString("captured_image_uri")
+            if (imageUri != null) {
+                binding.imageButton.setImageURI(Uri.parse(imageUri))
+                binding.imageButton.tag = imageUri
+            }
+        }
+
         binding.textView.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .replace(R.id.flMainPage, CameraFragment())
@@ -37,14 +46,16 @@ class NewItemFragment : Fragment() {
             val itemName = binding.editItemName.text.toString().trim()
             val brand = binding.editBrand.text.toString().trim()
             val category = binding.spinnerCategory.selectedItem.toString()
-            val stock = binding.editStock.text.toString().trim()
+            val _stock = binding.editStock.text.toString().trim()
+            val stock = _stock.toInt()
+            val photoUri = binding.imageButton.tag?.toString() ?: "default_value"
 
-            if (itemName.isEmpty() || stock.isEmpty()) {
+            if (itemName.isEmpty() || stock == 0) {
                 Toast.makeText(context, "Please fill out all required fields.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            val newItem = CatalogItem(0, itemName, brand, category, stock)
+            val newItem = CatalogItem(photoUri, itemName, brand, category, stock)
             val dbHelper = DatabaseHelper(requireContext())
             val result = dbHelper.addItem(newItem)
 

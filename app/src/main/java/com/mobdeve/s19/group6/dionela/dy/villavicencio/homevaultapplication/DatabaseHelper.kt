@@ -17,6 +17,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         const val COLUMN_BRAND = "brand"
         const val COLUMN_CATEGORY = "category"
         const val COLUMN_STOCK = "stock"
+        const val COLUMN_IMAGE = "image_path"
     }
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -26,7 +27,8 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 $COLUMN_ITEM_NAME TEXT,
                 $COLUMN_BRAND TEXT,
                 $COLUMN_CATEGORY TEXT,
-                $COLUMN_STOCK TEXT
+                $COLUMN_STOCK TEXT,
+                $COLUMN_IMAGE TEXT
             )
         """
         db.execSQL(createTableQuery)
@@ -44,6 +46,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         values.put(COLUMN_BRAND, item.brand)
         values.put(COLUMN_CATEGORY, item.category)
         values.put(COLUMN_STOCK, item.stock)
+        values.put(COLUMN_IMAGE, item.imageResId)
         val result = db.insert(TABLE_NAME, null, values)
         db.close()
         return result
@@ -58,8 +61,9 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 val itemName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ITEM_NAME))
                 val brand = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_BRAND))
                 val category = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CATEGORY))
-                val stock = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_STOCK))
-                items.add(CatalogItem(0, itemName, brand, category, stock)) // Replace 0 with a proper placeholder for imageResId
+                val stock = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_STOCK))
+                val photo = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_IMAGE))
+                items.add(CatalogItem(photo, itemName, brand, category, stock)) // Replace 0 with a proper placeholder for imageResId
             } while (cursor.moveToNext())
         }
         cursor.close()
@@ -103,8 +107,9 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 val itemName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ITEM_NAME))
                 val brand = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_BRAND))
                 val category = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CATEGORY))
-                val stock = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_STOCK))
-                items.add(CatalogItem(0, itemName, brand, category, stock)) // Placeholder for imageResId
+                val stock = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_STOCK))
+                val photo = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_IMAGE))
+                items.add(CatalogItem(photo, itemName, brand, category, stock)) // Placeholder for imageResId
             } while (cursor.moveToNext())
         }
 

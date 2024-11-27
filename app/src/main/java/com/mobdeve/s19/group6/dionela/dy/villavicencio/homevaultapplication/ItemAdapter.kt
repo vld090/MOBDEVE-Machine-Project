@@ -1,5 +1,6 @@
 package com.mobdeve.s19.group6.dionela.dy.villavicencio.homevaultapplication
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,11 +23,11 @@ class ItemAdapter(
         private val btnDeduct: Button = view.findViewById(R.id.btnDeduct) // Deduct button
 
         fun bind(item: CatalogItem) {
-            itemImage.setImageResource(item.imageResId)
+            itemImage.setImageURI(Uri.parse(item.imageResId))
             itemName.text = item.itemName
             itemBrand.text = item.brand ?: "No Brand"
             itemCategory.text = item.category
-            itemStock.text = item.stock
+            itemStock.text = item.stock.toString()
 
             // Set up Add and Deduct buttons
             btnAdd.setOnClickListener { incrementStock(item) }
@@ -42,7 +43,7 @@ class ItemAdapter(
 
             val result = dbHelper.updateStock(item.itemName, newStock)
             if (result > 0) {
-                item.stock = newStock.toString() // Update the local item
+                item.stock = newStock // Update the local item
                 itemStock.text = newStock.toString() // Reflect the change in UI
                 Toast.makeText(itemView.context, "Stock added!", Toast.LENGTH_SHORT).show()
             } else {
@@ -57,7 +58,7 @@ class ItemAdapter(
 
                 val result = dbHelper.updateStock(item.itemName, newStock)
                 if (result > 0) {
-                    item.stock = newStock.toString() // Update the local item
+                    item.stock = newStock // Update the local item
                     itemStock.text = newStock.toString() // Reflect the change in UI
                     Toast.makeText(itemView.context, "Stock deducted!", Toast.LENGTH_SHORT).show()
                 } else {

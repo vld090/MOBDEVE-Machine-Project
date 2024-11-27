@@ -46,14 +46,10 @@ class UploadReceiptFragment : Fragment() {
             .replace(R.id.flMainPage, CameraFragment())
             .addToBackStack(null)
             .commit()
-
         addImgBtn.setOnClickListener{
-
         }
 
         return view
     }
-
-
 
 }

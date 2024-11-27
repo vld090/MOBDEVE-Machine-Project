@@ -1,5 +1,6 @@
 package com.mobdeve.s19.group6.dionela.dy.villavicencio.homevaultapplication
 
+
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -71,12 +72,10 @@ class CameraFragment : Fragment() {
                 object : ImageCapture.OnImageSavedCallback {
                     override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                         val photoUri = Uri.fromFile(photo).toString()
-
                         val result = Bundle().apply {
                             putString("captured_image_uri", photoUri)
                         }
                         parentFragmentManager.setFragmentResult("camera_result", result)
-
                         parentFragmentManager.popBackStack()
                     }
 
@@ -87,7 +86,6 @@ class CameraFragment : Fragment() {
         }
 
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

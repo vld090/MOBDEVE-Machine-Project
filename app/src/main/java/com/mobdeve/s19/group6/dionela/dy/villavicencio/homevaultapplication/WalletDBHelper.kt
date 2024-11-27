@@ -73,4 +73,14 @@ class WalletDBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME,
         db.close()
         return walletItems
     }
+
+    fun deleteWalletItem(name: String): Int {
+        val db = this.writableDatabase
+        val rowsDeleted = db.delete(TABLE_WALLET, "$COLUMN_NAME = ?", arrayOf(name))
+        db.close()
+        return rowsDeleted
+    }
+
+
+
 }

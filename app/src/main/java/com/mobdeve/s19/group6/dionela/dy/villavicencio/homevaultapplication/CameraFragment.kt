@@ -1,6 +1,6 @@
 package com.mobdeve.s19.group6.dionela.dy.villavicencio.homevaultapplication
 
-import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.view.LayoutInflater
@@ -15,6 +15,9 @@ import androidx.fragment.app.Fragment
 import com.google.common.util.concurrent.ListenableFuture
 import com.mobdeve.s19.group6.dionela.dy.villavicencio.homevaultapplication.databinding.FragmentCameraBinding
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class CameraFragment : Fragment() {
 
@@ -60,27 +63,31 @@ class CameraFragment : Fragment() {
         binding.ibCamCapture.setOnClickListener {
             val photo = File(
                 requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
-                "${System.currentTimeMillis()}.jpg"
+                "${SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date())}.jpg"
             )
             val outputOptions = ImageCapture.OutputFileOptions.Builder(photo).build()
 
             imageCapture?.takePicture(outputOptions, ContextCompat.getMainExecutor(requireContext()),
                 object : ImageCapture.OnImageSavedCallback {
                     override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                        Toast.makeText(requireContext(), "Image saved to ${photo.absolutePath}", Toast.LENGTH_SHORT).show()
+                        val photoUri = Uri.fromFile(photo).toString()
+
+                        val result = Bundle().apply {
+                            putString("captured_image_uri", photoUri)
+                        }
+                        parentFragmentManager.setFragmentResult("camera_result", result)
+
+                        parentFragmentManager.popBackStack()
                     }
 
                     override fun onError(exception: ImageCaptureException) {
-                        Toast.makeText(requireContext(), "Image capture failed", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Photo capture failed", Toast.LENGTH_SHORT).show()
                     }
                 })
         }
 
     }
 
-    companion object {
-        private const val IMAGE_PICK_CODE = 1001
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

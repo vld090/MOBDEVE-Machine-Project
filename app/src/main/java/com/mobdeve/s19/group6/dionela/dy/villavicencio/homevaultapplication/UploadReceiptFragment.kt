@@ -36,10 +36,9 @@ class UploadReceiptFragment : Fragment() {
 
         val textViewButton = view.findViewById<TextView>(R.id.btnChooseImage)
         textViewButton.setOnClickListener {
-            // Perform button action, e.g., open image selector
             parentFragmentManager.beginTransaction()
                 .replace(R.id.flMainPage, CameraFragment())
-                .addToBackStack(null) // Allows you to go back
+                .addToBackStack(null)
                 .commit()
         }
 

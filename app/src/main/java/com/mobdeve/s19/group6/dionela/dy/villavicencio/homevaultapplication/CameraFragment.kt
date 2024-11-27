@@ -76,11 +76,6 @@ class CameraFragment : Fragment() {
                 })
         }
 
-        binding.ibCamLibrary.setOnClickListener{
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.type = "image/*"
-            startActivityForResult(intent, IMAGE_PICK_CODE)
-        }
     }
 
     companion object {

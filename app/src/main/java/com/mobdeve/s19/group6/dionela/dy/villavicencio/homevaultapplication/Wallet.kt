@@ -31,8 +31,8 @@ class Wallet : Fragment() {
         rvWallet.layoutManager = LinearLayoutManager(context)
 
         val walletList = listOf(
-            WalletItem(R.drawable.receipt1,"Receipt for Smart TV", "Smart TV","Samsung", "August 6, 2024", "August 6, 2023"),
-            WalletItem(R.drawable.receipt2, "PS5 Receipt", "PS5","Sony", "August 6, 2024", "August 6, 2023"),
+            WalletItem(R.drawable.receipt1,"Receipt for Smart TV", "Smart TV", "August 6, 2024", "August 6, 2023"),
+            WalletItem(R.drawable.receipt2, "PS5 Receipt", "PS5", "August 6, 2024", "August 6, 2023"),
         )
 
         walletAdapter = WalletAdapter(walletList)

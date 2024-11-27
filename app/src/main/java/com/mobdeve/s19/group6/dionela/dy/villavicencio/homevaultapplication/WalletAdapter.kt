@@ -18,8 +18,8 @@ class WalletAdapter(private var walletList: List<WalletItem>): RecyclerView.Adap
             with(walletList[position]) {
                 binding.ivReceiptImg.setImageResource(imageId)
                 binding.tvItemName.text = name
-                binding.tvAssocItem.text = assocItemBrand + " " + assocItemName
-                binding.tvExpiry.text = expiryDate.toString()
+                binding.tvAssocItem.text = assocItemName
+                binding.tvExpiryDate.text = expiryDate.toString()
                 binding.tvDateCreated.text = createdDate.toString()
             }
         }

@@ -54,7 +54,7 @@
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="350dp"
-        android:layout_height="400dp"
+        android:layout_height="380dp"
         android:layout_marginTop="80dp"
         android:background="@drawable/search_view_background"
         android:orientation="vertical"
@@ -88,10 +88,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:text="Add Image +"
-                android:textAlignment="center"
                 android:clickable="true"
-                android:focusable="true" />
+                android:focusable="true"
+                android:text="Add Image +"
+                android:textAlignment="center" />
 
 
         </LinearLayout>
@@ -129,23 +129,13 @@
         </LinearLayout>
 
         <EditText
-            android:id="@+id/etReceiptAmount"
+            android:id="@+id/etExpiry"
             android:layout_width="290dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:background="@drawable/search_view_background"
-            android:hint=" Amount"
-            android:inputType="number" />
-
-        <EditText
-            android:id="@+id/etDatePurchased"
-            android:layout_width="290dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/search_view_background"
-            android:hint=" Date Purchased"
+            android:hint="Expiry Date"
             android:inputType="number" />
 
         <Button

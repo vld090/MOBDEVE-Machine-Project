@@ -42,12 +42,13 @@ class UploadReceiptFragment : Fragment() {
             }
         }
 
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.flMainPage, CameraFragment())
-            .addToBackStack(null)
-            .commit()
-        addImgBtn.setOnClickListener{
+        addImgBtn.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.flMainPage, CameraFragment())
+                .addToBackStack(null)
+                .commit()
         }
+
 
         return view
     }

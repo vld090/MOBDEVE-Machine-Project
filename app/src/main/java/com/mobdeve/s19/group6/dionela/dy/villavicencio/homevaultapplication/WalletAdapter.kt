@@ -1,5 +1,6 @@
 package com.mobdeve.s19.group6.dionela.dy.villavicencio.homevaultapplication
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,7 +40,7 @@ class WalletAdapter(
         holder.tvExpiryDate.text = "Expires on ${item.expiryDate}"
         holder.tvDateCreated.text = item.createdDate
         // Set image if available, or use a default
-        holder.ivReceiptImg.setImageResource(R.drawable.default_receipt) // Replace with actual image loading logic if necessary
+        holder.ivReceiptImg.setImageURI(Uri.parse(item.imageId)) // Replace with actual image loading logic if necessary
 
         // Handle ellipsis click
         holder.ibEllipsis.setOnClickListener {

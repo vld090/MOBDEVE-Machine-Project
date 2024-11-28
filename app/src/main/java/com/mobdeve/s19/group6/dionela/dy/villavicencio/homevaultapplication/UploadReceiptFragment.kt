@@ -1,6 +1,7 @@
 package com.mobdeve.s19.group6.dionela.dy.villavicencio.homevaultapplication
 
 import android.app.DatePickerDialog
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -41,6 +42,15 @@ class UploadReceiptFragment : Fragment() {
         // Set up date picker for expiry date
         expiryEditText.setOnClickListener {
             showDatePickerDialog()
+        }
+
+        //pass image uri to fragment
+        parentFragmentManager.setFragmentResultListener("camera_result", viewLifecycleOwner) { _, bundle ->
+            val imageUri = bundle.getString("captured_image_uri")
+            if (imageUri != null) {
+                imageView.setImageURI(Uri.parse(imageUri))
+                imageView.tag = imageUri
+            }
         }
 
         // Handle image selection
@@ -90,9 +100,12 @@ class UploadReceiptFragment : Fragment() {
         val associatedItem = spinner.selectedItem?.toString() ?: "None" // Default to "None" if no selection
         val expiryDate = expiryEditText.text.toString()
         val createdDate = getCurrentDate() // Get current date
+        val receiptUri = imageView.tag?.toString() ?: ""
+
+        val newReceipt = WalletItem(receiptUri, receiptName, associatedItem, expiryDate, createdDate)
 
         if (receiptName.isNotEmpty() && expiryDate.isNotEmpty()) {
-            walletDBHelper.insertWalletItem(imageView.tag?.toString() ?: "", receiptName, associatedItem, expiryDate, createdDate)
+            walletDBHelper.insertWalletItem(newReceipt)
             parentFragmentManager.popBackStack() // Go back to Wallet fragment
         } else {
             Toast.makeText(requireContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show()

@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import com.mobdeve.s19.group6.dionela.dy.villavicencio.homevaultapplication.DatabaseHelper.Companion
 
 class WalletDBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
@@ -39,14 +40,14 @@ class WalletDBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME,
         onCreate(db)
     }
 
-    fun insertWalletItem(imageUri: String, name: String, assocItem: String, expiryDate: String, createdDate: String): Long {
+    fun insertWalletItem(receipt: WalletItem): Long {
         val db = this.writableDatabase
         val values = ContentValues().apply {
-            put(COLUMN_IMAGE, imageUri)
-            put(COLUMN_NAME, name)
-            put(COLUMN_ASSOC_ITEM, assocItem)
-            put(COLUMN_EXPIRY_DATE, expiryDate)
-            put(COLUMN_CREATED_DATE, createdDate)
+            put(COLUMN_IMAGE, receipt.imageId)
+            put(COLUMN_NAME, receipt.name)
+            put(COLUMN_ASSOC_ITEM, receipt.assocItemName)
+            put(COLUMN_EXPIRY_DATE, receipt.expiryDate)
+            put(COLUMN_CREATED_DATE, receipt.createdDate)
         }
         val result = db.insert(TABLE_WALLET, null, values)
         db.close()
@@ -60,7 +61,7 @@ class WalletDBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME,
         if (cursor.moveToFirst()) {
             do {
                 val walletItem = WalletItem(
-                    imageId = R.drawable.default_receipt, // Default placeholder
+                    imageId = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_IMAGE)), // Default placeholder
                     name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME)),
                     assocItemName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ASSOC_ITEM)),
                     expiryDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_EXPIRY_DATE)),

@@ -7,6 +7,19 @@
     tools:context=".Home">
 
     <!-- TODO: Update blank fragment layout -->
+
+    <ImageButton
+        android:id="@+id/imageButton2"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/filter"
+        app:layout_constraintBottom_toBottomOf="@+id/newItemBtn"
+        app:layout_constraintEnd_toEndOf="@+id/svSearchItem"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/newItemBtn"
+        app:layout_constraintTop_toTopOf="@+id/newItemBtn" />
+
     <TextView
         android:id="@+id/TitleBarCL"
         android:layout_width="match_parent"

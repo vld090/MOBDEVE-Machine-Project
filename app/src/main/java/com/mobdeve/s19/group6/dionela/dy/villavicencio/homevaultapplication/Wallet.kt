@@ -1,7 +1,5 @@
 package com.mobdeve.s19.group6.dionela.dy.villavicencio.homevaultapplication
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,7 +9,8 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-
+import java.text.SimpleDateFormat
+import java.util.*
 
 class Wallet : Fragment(), WalletAdapter.OnEllipsisClickListener {
     private lateinit var rvWallet: RecyclerView
@@ -39,10 +38,25 @@ class Wallet : Fragment(), WalletAdapter.OnEllipsisClickListener {
         fabAddReceiptBtn.setOnClickListener {
             navigateToUploadForm()
         }
+
+        val ibDropDown = view.findViewById<View>(R.id.llSortBy)
+        ibDropDown.setOnClickListener {
+            showSortMenu(it)
+        }
     }
 
-    private fun loadWalletItems() {
+    private fun loadWalletItems(sortOption: String? = null) {
         walletList = walletDBHelper.getAllWalletItems()
+
+        // Apply sorting based on the selected option
+        walletList = when (sortOption) {
+            "Item Name" -> walletList.sortedBy { it.name }
+            "Associated Item" -> walletList.sortedBy { it.assocItemName }
+            "Expiry Date" -> walletList.sortedBy { parseDate(it.expiryDate) }
+            "Date Created" -> walletList.sortedBy { parseDate(it.createdDate) }
+            else -> walletList
+        }
+
         walletAdapter = WalletAdapter(walletList, this)
         rvWallet.adapter = walletAdapter
     }
@@ -79,4 +93,23 @@ class Wallet : Fragment(), WalletAdapter.OnEllipsisClickListener {
         popupMenu.show()
     }
 
+    private fun showSortMenu(anchor: View) {
+        val popupMenu = PopupMenu(requireContext(), anchor)
+        popupMenu.menuInflater.inflate(R.menu.sort_menu, popupMenu.menu)
+        popupMenu.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.sort_item_name -> loadWalletItems("Item Name")
+                R.id.sort_assoc_item -> loadWalletItems("Associated Item")
+                R.id.sort_expiry_date -> loadWalletItems("Expiry Date")
+                R.id.sort_created_date -> loadWalletItems("Date Created")
+            }
+            true
+        }
+        popupMenu.show()
+    }
+
+    private fun parseDate(dateString: String): Date {
+        val format = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+        return format.parse(dateString) ?: Date(0) // Default to epoch if parsing fails
+    }
 }

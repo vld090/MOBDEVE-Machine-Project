@@ -5,10 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.PopupMenu
+import android.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import android.widget.ImageButton
-import android.widget.SearchView
 
 class Home : Fragment() {
 
@@ -57,6 +58,12 @@ class Home : Fragment() {
                 return true
             }
         })
+
+        // Set up Sort Button
+        val homeSortBtn = view.findViewById<ImageButton>(R.id.homeSortBtn)
+        homeSortBtn.setOnClickListener {
+            showSortOptions()
+        }
     }
 
     private fun filterItems(query: String?) {
@@ -70,4 +77,26 @@ class Home : Fragment() {
         items.addAll(filteredItems)
         itemAdapter.notifyDataSetChanged() // Notify adapter about changes
     }
+
+    private fun showSortOptions() {
+        val popupMenu = PopupMenu(requireContext(), requireView().findViewById(R.id.homeSortBtn))
+        popupMenu.menuInflater.inflate(R.menu.sort_items, popupMenu.menu)
+
+        popupMenu.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.sort_by_name -> sortItems { it.itemName }
+                R.id.sort_by_brand -> sortItems { it.brand }
+                R.id.sort_by_category -> sortItems { it.category }
+                R.id.sort_by_stock -> sortItems { it.stock }
+            }
+            true
+        }
+        popupMenu.show()
+    }
+
+    private fun sortItems(selector: (CatalogItem) -> Comparable<*>?) {
+        items.sortWith(compareBy(selector))
+        itemAdapter.notifyDataSetChanged()
+    }
 }
+

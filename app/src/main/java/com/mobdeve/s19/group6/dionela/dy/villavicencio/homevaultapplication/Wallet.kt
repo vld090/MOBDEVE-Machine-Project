@@ -95,7 +95,7 @@ class Wallet : Fragment(), WalletAdapter.OnEllipsisClickListener {
 
     private fun showSortMenu(anchor: View) {
         val popupMenu = PopupMenu(requireContext(), anchor)
-        popupMenu.menuInflater.inflate(R.menu.sort_menu, popupMenu.menu)
+        popupMenu.menuInflater.inflate(R.menu.sort_wallet, popupMenu.menu)
         popupMenu.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.sort_item_name -> loadWalletItems("Item Name")

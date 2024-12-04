@@ -15,8 +15,18 @@ class WalletAdapter(
     private val listener: OnEllipsisClickListener
 ) : RecyclerView.Adapter<WalletAdapter.WalletViewHolder>() {
 
+    private lateinit var itemListener :OnItemClickListener
+
+    interface OnItemClickListener {
+        fun onItemClick(position: Int)
+    }
+
     interface OnEllipsisClickListener {
         fun onEllipsisClick(walletItem: WalletItem)
+    }
+
+    fun setOnItemClickListener(listener : OnItemClickListener){
+        itemListener = listener
     }
 
     inner class WalletViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -26,6 +36,16 @@ class WalletAdapter(
         val tvExpiryDate: TextView = itemView.findViewById(R.id.tvExpiryDate)
         val tvDateCreated: TextView = itemView.findViewById(R.id.tvDateCreated)
         val ibEllipsis: ImageButton = itemView.findViewById(R.id.ibEllipsis)
+
+        init {
+            itemView.setOnClickListener {
+                val position = absoluteAdapterPosition
+                if (position != RecyclerView.NO_POSITION && ::itemListener.isInitialized) {
+                    itemListener.onItemClick(position)
+                }
+            }
+        }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WalletViewHolder {

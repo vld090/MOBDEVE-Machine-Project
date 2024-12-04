@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +13,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.text.SimpleDateFormat
 import java.util.*
 
-class Wallet : Fragment(), WalletAdapter.OnEllipsisClickListener {
+class Wallet : Fragment(), WalletAdapter.OnEllipsisClickListener, WalletAdapter.OnItemClickListener {
     private lateinit var rvWallet: RecyclerView
     private lateinit var walletAdapter: WalletAdapter
     private lateinit var walletDBHelper: WalletDBHelper
@@ -59,6 +60,7 @@ class Wallet : Fragment(), WalletAdapter.OnEllipsisClickListener {
 
         walletAdapter = WalletAdapter(walletList, this)
         rvWallet.adapter = walletAdapter
+        walletAdapter.setOnItemClickListener(this)
     }
 
     private fun navigateToUploadForm() {
@@ -111,5 +113,28 @@ class Wallet : Fragment(), WalletAdapter.OnEllipsisClickListener {
     private fun parseDate(dateString: String): Date {
         val format = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
         return format.parse(dateString) ?: Date(0) // Default to epoch if parsing fails
+    }
+
+
+    override fun onItemClick(position: Int) {
+        val selectedItem = walletList[position]
+        navigateToViewReceipt(selectedItem)
+    }
+
+    private fun navigateToViewReceipt(selectedItem : WalletItem) {
+        val viewReceiptFragment = ViewReceiptFragment()
+
+        val args = Bundle().apply {
+            putString("receiptName", selectedItem.name)
+            putString("associatedItem", selectedItem.assocItemName)
+            putString("expiryDate", selectedItem.expiryDate)
+            putString("receiptImageResUri", selectedItem.imageId)
+        }
+        viewReceiptFragment.arguments = args
+
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.flMainPage, viewReceiptFragment)
+            .addToBackStack(null)
+            .commit()
     }
 }

@@ -16,7 +16,7 @@ class HistoryDBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         const val COLUMN_ID = "id"
         const val COLUMN_ACTION = "action"
         const val COLUMN_ITEM = "item"
-        const val COLUMN_DATE = "date created"
+        const val COLUMN_DATE = "date_created"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -39,8 +39,8 @@ class HistoryDBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
     fun insertHistoryItem(history: HistoryItem): Long {
         val db = this.writableDatabase
         val values = ContentValues().apply {
-            put(COLUMN_ACTION, history.item)
-            put(COLUMN_ITEM, history.action)
+            put(COLUMN_ACTION, history.action)
+            put(COLUMN_ITEM, history.item)
             put(COLUMN_DATE, history.date)
         }
         val result = db.insert(TABLE_LOG_HISTORY, null, values)

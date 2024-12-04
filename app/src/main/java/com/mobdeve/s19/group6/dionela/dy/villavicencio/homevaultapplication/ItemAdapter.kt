@@ -6,10 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class ItemAdapter(
     private val items: MutableList<CatalogItem>, // Mutable list to allow item modification
-    private val dbHelper: DatabaseHelper // Pass DatabaseHelper for operations
+    private val dbHelper: DatabaseHelper, // Pass DatabaseHelper for operations
+    private val historyDBHelper: HistoryDBHelper
 ) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
 
     inner class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -45,6 +49,11 @@ class ItemAdapter(
             if (result > 0) {
                 item.stock = newStock // Update the local item
                 itemStock.text = newStock.toString() // Reflect the change in UI
+
+                val date = getCurrentDate()
+                val newActivity = HistoryItem("Add Stock: ", item.itemName, date)
+                historyDBHelper.insertHistoryItem(newActivity)
+
                 Toast.makeText(itemView.context, "Stock added!", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(itemView.context, "Failed to update stock.", Toast.LENGTH_SHORT).show()
@@ -60,6 +69,11 @@ class ItemAdapter(
                 if (result > 0) {
                     item.stock = newStock // Update the local item
                     itemStock.text = newStock.toString() // Reflect the change in UI
+
+                    val date = getCurrentDate()
+                    val newActivity = HistoryItem("Deduct Stock: ", item.itemName, date)
+                    historyDBHelper.insertHistoryItem(newActivity)
+
                     Toast.makeText(itemView.context, "Stock deducted!", Toast.LENGTH_SHORT).show()
                 } else {
                     Toast.makeText(itemView.context, "Failed to update stock.", Toast.LENGTH_SHORT).show()
@@ -90,6 +104,11 @@ class ItemAdapter(
                 val position = items.indexOf(item)
                 items.removeAt(position) // Remove from the list
                 notifyItemRemoved(position) // Update RecyclerView
+
+                val date = getCurrentDate()
+                val newActivity = HistoryItem("Delete Item: ", itemName.toString(), date)
+                historyDBHelper.insertHistoryItem(newActivity)
+
                 Toast.makeText(
                     itemView.context,
                     "Item '${item.itemName}' deleted successfully!",
@@ -111,4 +130,9 @@ class ItemAdapter(
     }
 
     override fun getItemCount() = items.size
+
+    private fun getCurrentDate(): String {
+        val dateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+        return dateFormat.format(Date())
+    }
 }

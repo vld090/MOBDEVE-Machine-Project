@@ -9,6 +9,9 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.mobdeve.s19.group6.dionela.dy.villavicencio.homevaultapplication.databinding.FragmentNewItemBinding
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class NewItemFragment : Fragment() {
 
@@ -60,6 +63,11 @@ class NewItemFragment : Fragment() {
             val result = dbHelper.addItem(newItem)
 
             if (result != -1L) {
+                val date = getCurrentDate()
+                val newActivity = HistoryItem("New Item: ", itemName, date)
+                val historyDB = HistoryDBHelper(requireContext())
+
+                historyDB.insertHistoryItem(newActivity)
                 Toast.makeText(context, "Item added successfully!", Toast.LENGTH_SHORT).show()
                 parentFragmentManager.popBackStack()
             } else {
@@ -77,5 +85,10 @@ class NewItemFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun getCurrentDate(): String {
+        val dateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+        return dateFormat.format(Date())
     }
 }

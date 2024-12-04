@@ -16,6 +16,7 @@ class Home : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var itemAdapter: ItemAdapter
     private lateinit var dbHelper: DatabaseHelper
+    private lateinit var historyDBHelper: HistoryDBHelper
     private lateinit var items: MutableList<CatalogItem> // Maintain a mutable list of items
 
     override fun onCreateView(
@@ -31,10 +32,12 @@ class Home : Fragment() {
         recyclerView = view.findViewById(R.id.recyclerView2)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
+        historyDBHelper = HistoryDBHelper(requireContext())
+
         dbHelper = DatabaseHelper(requireContext())
         items = dbHelper.getAllItems().toMutableList() // Load all items initially
 
-        itemAdapter = ItemAdapter(items, dbHelper)
+        itemAdapter = ItemAdapter(items, dbHelper, historyDBHelper)
         recyclerView.adapter = itemAdapter
 
         val newItemBtn = view.findViewById<ImageButton>(R.id.newItemBtn)

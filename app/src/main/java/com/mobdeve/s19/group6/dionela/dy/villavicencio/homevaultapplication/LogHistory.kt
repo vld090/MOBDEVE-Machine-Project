@@ -12,7 +12,8 @@ class LogHistory : Fragment() {
 
     private lateinit var rvHistory: RecyclerView
     private lateinit var historyAdapter: HistoryAdapter
-
+    private lateinit var historyItem: MutableList<HistoryItem>
+    private lateinit var historyDBHelper: HistoryDBHelper
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,17 +28,11 @@ class LogHistory : Fragment() {
         rvHistory = view.findViewById(R.id.rvHistoryList)
         rvHistory.layoutManager = LinearLayoutManager(context)
 
-        val historyList = listOf(
-            HistoryItem("New Item","Eggs", "October 10, 2024"),
-            HistoryItem("New Item", "Tissue Paper", "July 10, 2024"),
-            HistoryItem( "New Item", "Onions", "October 10, 2024"),
-            HistoryItem( "New Item", "Smart TV", "August 6, 2023"),
-            HistoryItem("New Item", "PS5", "August 6, 2023"),
-            HistoryItem("New Item", "Rice", "October 10, 2024"),
-            HistoryItem("New Item", "Ice Cream", "October 10, 2024")
-        )
+        historyDBHelper = HistoryDBHelper(requireContext())
 
-        historyAdapter = HistoryAdapter(historyList)
+        historyItem = historyDBHelper.getAllHistoryItems().toMutableList()
+
+        historyAdapter = HistoryAdapter(historyItem)
         rvHistory.adapter = historyAdapter
     }
 }

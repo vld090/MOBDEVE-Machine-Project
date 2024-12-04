@@ -106,6 +106,13 @@ class UploadReceiptFragment : Fragment() {
 
         if (receiptName.isNotEmpty() && expiryDate.isNotEmpty()) {
             walletDBHelper.insertWalletItem(newReceipt)
+
+            val date = getCurrentDate()
+            val newActivity = HistoryItem("New Item: ", receiptName, date)
+            val historyDB = HistoryDBHelper(requireContext())
+
+            historyDB.insertHistoryItem(newActivity)
+            Toast.makeText(context, "Receipt added successfully!", Toast.LENGTH_SHORT).show()
             parentFragmentManager.popBackStack() // Go back to Wallet fragment
         } else {
             Toast.makeText(requireContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show()

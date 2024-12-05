@@ -10,7 +10,7 @@ class WalletDBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME,
 
     companion object {
         private const val DATABASE_NAME = "wallet.db"
-        private const val DATABASE_VERSION = 1
+        private const val DATABASE_VERSION = 2
 
         const val TABLE_WALLET = "wallet"
         const val COLUMN_ID = "id"

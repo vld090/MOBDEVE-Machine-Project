@@ -10,7 +10,7 @@ class HistoryDBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
 
     companion object {
         private const val DATABASE_NAME = "history.db"
-        private const val DATABASE_VERSION = 1
+        private const val DATABASE_VERSION = 2
 
         const val TABLE_LOG_HISTORY = "history"
         const val COLUMN_ID = "id"

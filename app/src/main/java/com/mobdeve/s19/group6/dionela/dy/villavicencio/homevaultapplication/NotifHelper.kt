@@ -11,16 +11,30 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 
-class NotifHelper (private val context: Context) {
+class NotifHelper private constructor(private val context: Context) {
 
     companion object {
         const val CHANNEL_ID = "notif_channel"
+        @Volatile
+        private var INSTANCE: NotifHelper? = null
+
+        fun getInstance(context: Context): NotifHelper {
+            return INSTANCE ?: synchronized(this) {
+                INSTANCE ?: NotifHelper(context.applicationContext).also { INSTANCE = it }
+            }
+        }
     }
 
-    fun createNotificationChannel() {
+    init {
+        createNotificationChannel()
+    }
+
+    private val notifications = mutableListOf<NotifItem>()
+
+    private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = "Notifications"
-            val descriptionText = "Channel for app notifications,specifically for item with low stock and warranties close to expiry."
+            val descriptionText = "Channel for app notifications, specifically for item with low stock and warranties close to expiry."
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
                 description = descriptionText
@@ -46,9 +60,11 @@ class NotifHelper (private val context: Context) {
         with(NotificationManagerCompat.from(context)) {
             notify(System.currentTimeMillis().toInt(), builder.build())
         }
+
+        notifications.add(NotifItem("Item '$item' is low in stock!", "Just now"))
     }
 
-    fun sendExpiryNotification(receipt: String, date: String) {
+    fun sendExpiryNotification(itemName: String, expiryDate: String) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
             ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(context, "Notification permission not granted", Toast.LENGTH_SHORT).show()
@@ -57,11 +73,18 @@ class NotifHelper (private val context: Context) {
 
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification)
-            .setContentText("Receipt will expire on date.")
+            .setContentTitle("Expiry Alert")
+            .setContentText("Item '$itemName' will expire on $expiryDate.")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
         with(NotificationManagerCompat.from(context)) {
             notify(System.currentTimeMillis().toInt(), builder.build())
         }
+
+        notifications.add(NotifItem("Item '$itemName' will expire on $expiryDate.", "Just now"))
+    }
+
+    fun getNotifications(): List<NotifItem> {
+        return notifications
     }
 }

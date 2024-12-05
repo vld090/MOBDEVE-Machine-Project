@@ -1,12 +1,16 @@
 package com.mobdeve.s19.group6.dionela.dy.villavicencio.homevaultapplication
 
 import android.Manifest
+import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.SystemClock
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -70,6 +74,8 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        scheduleExpiryCheck()
     }
 
     companion object {
@@ -135,4 +141,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun scheduleExpiryCheck() {
+        val intent = Intent(this, ExpiryCheckService::class.java)
+        val pendingIntent = PendingIntent.getService(
+            this, 0, intent,
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_IMMUTABLE else 0
+        )
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmManager.setInexactRepeating(
+            AlarmManager.ELAPSED_REALTIME_WAKEUP,
+            SystemClock.elapsedRealtime() + AlarmManager.INTERVAL_DAY,
+            AlarmManager.INTERVAL_DAY,
+            pendingIntent
+        )
+    }
 }

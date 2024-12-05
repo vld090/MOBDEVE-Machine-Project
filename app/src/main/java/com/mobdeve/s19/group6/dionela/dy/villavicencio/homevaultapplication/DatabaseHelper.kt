@@ -4,12 +4,16 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
         private const val DATABASE_NAME = "items.db"
-        private const val DATABASE_VERSION = 2
+        private const val DATABASE_VERSION = 3
 
         const val TABLE_NAME = "items"
         const val COLUMN_ID = "id"
@@ -18,6 +22,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         const val COLUMN_CATEGORY = "category"
         const val COLUMN_STOCK = "stock"
         const val COLUMN_IMAGE = "image_path"
+        const val COLUMN_EXPIRY_DATE = "expiry_date"
     }
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -27,26 +32,30 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 $COLUMN_ITEM_NAME TEXT,
                 $COLUMN_BRAND TEXT,
                 $COLUMN_CATEGORY TEXT,
-                $COLUMN_STOCK TEXT,
-                $COLUMN_IMAGE TEXT
+                $COLUMN_STOCK INTEGER,
+                $COLUMN_IMAGE TEXT,
+                $COLUMN_EXPIRY_DATE TEXT
             )
         """
         db.execSQL(createTableQuery)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        db.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")
-        onCreate(db)
+        if (oldVersion < 3) {
+            db.execSQL("ALTER TABLE $TABLE_NAME ADD COLUMN $COLUMN_EXPIRY_DATE TEXT")
+        }
     }
 
     fun addItem(item: CatalogItem): Long {
         val db = this.writableDatabase
-        val values = ContentValues()
-        values.put(COLUMN_ITEM_NAME, item.itemName)
-        values.put(COLUMN_BRAND, item.brand)
-        values.put(COLUMN_CATEGORY, item.category)
-        values.put(COLUMN_STOCK, item.stock)
-        values.put(COLUMN_IMAGE, item.imageResId)
+        val values = ContentValues().apply {
+            put(COLUMN_ITEM_NAME, item.itemName)
+            put(COLUMN_BRAND, item.brand)
+            put(COLUMN_CATEGORY, item.category)
+            put(COLUMN_STOCK, item.stock)
+            put(COLUMN_IMAGE, item.imageResId)
+            put(COLUMN_EXPIRY_DATE, item.expiryDate)
+        }
         val result = db.insert(TABLE_NAME, null, values)
         db.close()
         return result
@@ -55,18 +64,20 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     fun getAllItems(): List<CatalogItem> {
         val items = mutableListOf<CatalogItem>()
         val db = this.readableDatabase
-        val cursor = db.query(TABLE_NAME, null, null, null, null, null, null)
-        if (cursor.moveToFirst()) {
-            do {
-                val itemName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ITEM_NAME))
-                val brand = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_BRAND))
-                val category = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CATEGORY))
-                val stock = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_STOCK))
-                val photo = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_IMAGE))
-                items.add(CatalogItem(photo, itemName, brand, category, stock)) // Replace 0 with a proper placeholder for imageResId
-            } while (cursor.moveToNext())
+        val cursor = db.rawQuery("SELECT * FROM $TABLE_NAME", null)
+        cursor?.use {
+            if (it.moveToFirst()) {
+                do {
+                    val itemName = it.getString(it.getColumnIndexOrThrow(COLUMN_ITEM_NAME))
+                    val brand = it.getString(it.getColumnIndexOrThrow(COLUMN_BRAND))
+                    val category = it.getString(it.getColumnIndexOrThrow(COLUMN_CATEGORY))
+                    val stock = it.getInt(it.getColumnIndexOrThrow(COLUMN_STOCK))
+                    val photo = it.getString(it.getColumnIndexOrThrow(COLUMN_IMAGE))
+                    val expiryDate = it.getString(it.getColumnIndexOrThrow(COLUMN_EXPIRY_DATE))
+                    items.add(CatalogItem(photo, itemName, brand, category, stock, expiryDate))
+                } while (it.moveToNext())
+            }
         }
-        cursor.close()
         db.close()
         return items
     }
@@ -81,7 +92,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     fun updateStock(itemName: String, newStock: Int): Int {
         val db = this.writableDatabase
         val values = ContentValues().apply {
-            put(COLUMN_STOCK, newStock.toString())
+            put(COLUMN_STOCK, newStock)
         }
         val rowsUpdated = db.update(TABLE_NAME, values, "$COLUMN_ITEM_NAME = ?", arrayOf(itemName))
         db.close()
@@ -91,7 +102,6 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     fun searchItemsByName(query: String): List<CatalogItem> {
         val items = mutableListOf<CatalogItem>()
         val db = this.readableDatabase
-
         val cursor = db.query(
             TABLE_NAME,
             null, // Select all columns
@@ -101,21 +111,48 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             null,
             null
         )
-
-        if (cursor.moveToFirst()) {
-            do {
-                val itemName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ITEM_NAME))
-                val brand = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_BRAND))
-                val category = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CATEGORY))
-                val stock = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_STOCK))
-                val photo = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_IMAGE))
-                items.add(CatalogItem(photo, itemName, brand, category, stock)) // Placeholder for imageResId
-            } while (cursor.moveToNext())
+        cursor?.use {
+            if (it.moveToFirst()) {
+                do {
+                    val itemName = it.getString(it.getColumnIndexOrThrow(COLUMN_ITEM_NAME))
+                    val brand = it.getString(it.getColumnIndexOrThrow(COLUMN_BRAND))
+                    val category = it.getString(it.getColumnIndexOrThrow(COLUMN_CATEGORY))
+                    val stock = it.getInt(it.getColumnIndexOrThrow(COLUMN_STOCK))
+                    val photo = it.getString(it.getColumnIndexOrThrow(COLUMN_IMAGE))
+                    val expiryDate = it.getString(it.getColumnIndexOrThrow(COLUMN_EXPIRY_DATE))
+                    items.add(CatalogItem(photo, itemName, brand, category, stock, expiryDate))
+                } while (it.moveToNext())
+            }
         }
-
-        cursor.close()
         db.close()
         return items
     }
 
+    fun getExpiringItems(daysBeforeExpiry: Int): List<CatalogItem> {
+        val items = mutableListOf<CatalogItem>()
+        val db = this.readableDatabase
+        val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+        Log.d("DatabaseHelper", "Current Date: $currentDate")
+        val query = "SELECT * FROM $TABLE_NAME WHERE date($COLUMN_EXPIRY_DATE) <= date(?, '+$daysBeforeExpiry days')"
+        val cursor = db.rawQuery(query, arrayOf(currentDate))
+        Log.d("DatabaseHelper", "Query: $query")
+        cursor?.use {
+            if (it.moveToFirst()) {
+                do {
+                    val itemName = it.getString(it.getColumnIndexOrThrow(COLUMN_ITEM_NAME))
+                    val brand = it.getString(it.getColumnIndexOrThrow(COLUMN_BRAND))
+                    val category = it.getString(it.getColumnIndexOrThrow(COLUMN_CATEGORY))
+                    val stock = it.getInt(it.getColumnIndexOrThrow(COLUMN_STOCK))
+                    val photo = it.getString(it.getColumnIndexOrThrow(COLUMN_IMAGE))
+                    val expiryDate = it.getString(it.getColumnIndexOrThrow(COLUMN_EXPIRY_DATE))
+                    Log.d("DatabaseHelper", "Found expiring item: $itemName, Expiry Date: $expiryDate")
+                    items.add(CatalogItem(photo, itemName, brand, category, stock, expiryDate))
+                } while (it.moveToNext())
+            } else {
+                Log.d("DatabaseHelper", "No expiring items found.")
+            }
+        }
+        db.close()
+        return items
+    }
 }

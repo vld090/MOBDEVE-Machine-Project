@@ -1,13 +1,15 @@
 package com.mobdeve.s19.group6.dionela.dy.villavicencio.homevaultapplication
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.SearchView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -67,6 +69,11 @@ class Home : Fragment() {
         homeSortBtn.setOnClickListener {
             showSortOptions()
         }
+
+        // Set up the button click listener to trigger expiry check
+        view.findViewById<Button>(R.id.btnTriggerExpiryCheck).setOnClickListener {
+            triggerExpiryCheck()
+        }
     }
 
     private fun filterItems(query: String?) {
@@ -101,5 +108,9 @@ class Home : Fragment() {
         items.sortWith(compareBy(selector))
         itemAdapter.notifyDataSetChanged()
     }
-}
 
+    private fun triggerExpiryCheck() {
+        val intent = Intent(requireContext(), ExpiryCheckService::class.java)
+        requireContext().startService(intent)
+    }
+}

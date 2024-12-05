@@ -22,7 +22,6 @@ class NotificationAdapter(private var notifList: List<NotifItem>): RecyclerView.
         }
     }
 
-
     override fun getItemCount(): Int {
         return notifList.size
     }

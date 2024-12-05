@@ -5,5 +5,6 @@ data class CatalogItem(
     val itemName: String,
     val brand: String,
     val category: String,
-    var stock: Int
+    var stock: Int,
+    val expiryDate: String
 )

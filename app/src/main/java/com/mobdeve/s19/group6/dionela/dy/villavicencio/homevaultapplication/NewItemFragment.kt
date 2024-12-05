@@ -52,13 +52,15 @@ class NewItemFragment : Fragment() {
             val _stock = binding.editStock.text.toString().trim()
             val stock = _stock.toInt()
             val photoUri = binding.imageButton.tag?.toString() ?: "default_value"
+            val expiryDate = binding.editExpiryDate.text.toString().trim()
 
-            if (itemName.isEmpty() || stock == 0) {
+            if (itemName.isEmpty() || stock == 0 || expiryDate.isEmpty()) {
                 Toast.makeText(context, "Please fill out all required fields.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            val newItem = CatalogItem(photoUri, itemName, brand, category, stock)
+            val formattedExpiryDate = formatDateString(expiryDate)
+            val newItem = CatalogItem(photoUri, itemName, brand, category, stock, formattedExpiryDate)
             val dbHelper = DatabaseHelper(requireContext())
             val result = dbHelper.addItem(newItem)
 
@@ -74,6 +76,13 @@ class NewItemFragment : Fragment() {
                 Toast.makeText(context, "Failed to add item.", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun formatDateString(dateString: String): String {
+        val inputFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+        val outputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val date = inputFormat.parse(dateString)
+        return outputFormat.format(date)
     }
 
     private fun setupCategoryDropdown() {

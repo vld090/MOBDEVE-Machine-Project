@@ -37,10 +37,11 @@
         android:id="@+id/newItemBtn"
         android:layout_width="110dp"
         android:layout_height="32dp"
-        android:background="@drawable/button_background"
         android:layout_marginVertical="10dp"
-        app:layout_constraintTop_toBottomOf="@id/svSearchItem"
-        app:layout_constraintStart_toStartOf="@id/svSearchItem"/>
+        android:layout_marginTop="12dp"
+        android:background="@drawable/button_background"
+        app:layout_constraintStart_toStartOf="@id/svSearchItem"
+        app:layout_constraintTop_toBottomOf="@id/svSearchItem" />
 
     <TextView
         android:id="@+id/tvNewItem"
@@ -68,14 +69,15 @@
 
     <Button
         android:id="@+id/btnTriggerExpiryCheck"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="120dp"
+        android:layout_height="36dp"
+        android:backgroundTint="@color/main"
         android:text="Check Expiry"
         android:textSize="12sp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/newItemBtn"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toStartOf="@+id/homeSortBtn"
+        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintStart_toEndOf="@+id/newItemBtn"
+        app:layout_constraintTop_toTopOf="@+id/newItemBtn" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView2"
@@ -94,9 +96,10 @@
         android:layout_height="40dp"
         android:scaleType="centerCrop"
         android:src="@drawable/filter"
-        app:layout_constraintTop_toTopOf="@id/newItemBtn"
         app:layout_constraintBottom_toBottomOf="@id/newItemBtn"
+        app:layout_constraintEnd_toEndOf="@id/svSearchItem"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@id/newItemBtn"
-        app:layout_constraintEnd_toEndOf="@id/svSearchItem"/>
+        app:layout_constraintTop_toTopOf="@id/newItemBtn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

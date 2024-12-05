@@ -13,7 +13,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
     companion object {
         private const val DATABASE_NAME = "items.db"
-        private const val DATABASE_VERSION = 4
+        private const val DATABASE_VERSION = 5 // Incremented version to trigger onUpgrade
 
         const val TABLE_NAME = "items"
         const val COLUMN_ID = "id"
@@ -60,6 +60,9 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         }
         if (oldVersion < 4) {
             db.execSQL("CREATE TABLE $NOTIF_TABLE_NAME ($NOTIF_COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, $NOTIF_COLUMN_MESSAGE TEXT, $NOTIF_COLUMN_TIME_INTERVAL TEXT)")
+        }
+        if (oldVersion < 5) {
+            db.execSQL("ALTER TABLE $TABLE_NAME ADD COLUMN $COLUMN_IMAGE TEXT")
         }
     }
 

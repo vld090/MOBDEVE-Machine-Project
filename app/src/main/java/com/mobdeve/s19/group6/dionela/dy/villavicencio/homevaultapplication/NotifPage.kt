@@ -28,7 +28,7 @@ class NotifPage : Fragment() {
         rvNotif.layoutManager = LinearLayoutManager(context)
 
         notifHelper = NotifHelper.getInstance(requireContext())
-        val notifList = notifHelper.getNotifications() 
+        val notifList = notifHelper.getNotifications().reversed() 
 
         notifAdapter = NotificationAdapter(notifList)
         rvNotif.adapter = notifAdapter

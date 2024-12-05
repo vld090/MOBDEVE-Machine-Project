@@ -5,4 +5,6 @@
     <string name="receipt_image_preview">Receipt Image Preview</string>
     <string name="select_image">Select Image</string>
     <string name="upload_receipt">Upload Receipt</string>
+    <string name="channel_name">Low Stock Alerts</string>
+    <string name="channel_description">Notifications for items that are low in stock.</string>
 </resources>

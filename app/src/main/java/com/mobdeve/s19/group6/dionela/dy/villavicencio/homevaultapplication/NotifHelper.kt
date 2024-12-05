@@ -25,11 +25,11 @@ class NotifHelper private constructor(private val context: Context) {
         }
     }
 
+    private val dbHelper = DatabaseHelper(context)
+
     init {
         createNotificationChannel()
     }
-
-    private val notifications = mutableListOf<NotifItem>()
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -61,7 +61,8 @@ class NotifHelper private constructor(private val context: Context) {
             notify(System.currentTimeMillis().toInt(), builder.build())
         }
 
-        notifications.add(NotifItem("Item '$item' is low in stock!", "Just now"))
+        val notifItem = NotifItem("Item '$item' is low in stock!", "Just now")
+        dbHelper.addNotification(notifItem)
     }
 
     fun sendExpiryNotification(itemName: String, expiryDate: String) {
@@ -81,10 +82,11 @@ class NotifHelper private constructor(private val context: Context) {
             notify(System.currentTimeMillis().toInt(), builder.build())
         }
 
-        notifications.add(NotifItem("Item '$itemName' will expire on $expiryDate.", "Just now"))
+        val notifItem = NotifItem("Item '$itemName' will expire on $expiryDate.", "Just now")
+        dbHelper.addNotification(notifItem)
     }
 
     fun getNotifications(): List<NotifItem> {
-        return notifications
+        return dbHelper.getAllNotifications()
     }
 }

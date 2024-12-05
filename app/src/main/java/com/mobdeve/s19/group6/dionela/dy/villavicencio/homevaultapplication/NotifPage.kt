@@ -28,7 +28,7 @@ class NotifPage : Fragment() {
         rvNotif.layoutManager = LinearLayoutManager(context)
 
         notifHelper = NotifHelper.getInstance(requireContext())
-        val notifList = notifHelper.getNotifications().reversed() 
+        val notifList = notifHelper.getNotifications().reversed() // Reverse the list to show latest notifications at the top
 
         notifAdapter = NotificationAdapter(notifList)
         rvNotif.adapter = notifAdapter

@@ -13,7 +13,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
     companion object {
         private const val DATABASE_NAME = "items.db"
-        private const val DATABASE_VERSION = 3
+        private const val DATABASE_VERSION = 4
 
         const val TABLE_NAME = "items"
         const val COLUMN_ID = "id"
@@ -23,10 +23,15 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         const val COLUMN_STOCK = "stock"
         const val COLUMN_IMAGE = "image_path"
         const val COLUMN_EXPIRY_DATE = "expiry_date"
+
+        const val NOTIF_TABLE_NAME = "notifications"
+        const val NOTIF_COLUMN_ID = "id"
+        const val NOTIF_COLUMN_MESSAGE = "message"
+        const val NOTIF_COLUMN_TIME_INTERVAL = "time_interval"
     }
 
     override fun onCreate(db: SQLiteDatabase) {
-        val createTableQuery = """
+        val createItemsTableQuery = """
             CREATE TABLE $TABLE_NAME (
                 $COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT,
                 $COLUMN_ITEM_NAME TEXT,
@@ -37,12 +42,24 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 $COLUMN_EXPIRY_DATE TEXT
             )
         """
-        db.execSQL(createTableQuery)
+        db.execSQL(createItemsTableQuery)
+
+        val createNotifTableQuery = """
+            CREATE TABLE $NOTIF_TABLE_NAME (
+                $NOTIF_COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                $NOTIF_COLUMN_MESSAGE TEXT,
+                $NOTIF_COLUMN_TIME_INTERVAL TEXT
+            )
+        """
+        db.execSQL(createNotifTableQuery)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         if (oldVersion < 3) {
             db.execSQL("ALTER TABLE $TABLE_NAME ADD COLUMN $COLUMN_EXPIRY_DATE TEXT")
+        }
+        if (oldVersion < 4) {
+            db.execSQL("CREATE TABLE $NOTIF_TABLE_NAME ($NOTIF_COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, $NOTIF_COLUMN_MESSAGE TEXT, $NOTIF_COLUMN_TIME_INTERVAL TEXT)")
         }
     }
 
@@ -154,5 +171,33 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         }
         db.close()
         return items
+    }
+
+    fun addNotification(notifItem: NotifItem): Long {
+        val db = this.writableDatabase
+        val values = ContentValues().apply {
+            put(NOTIF_COLUMN_MESSAGE, notifItem.message)
+            put(NOTIF_COLUMN_TIME_INTERVAL, notifItem.timeInterval)
+        }
+        val result = db.insert(NOTIF_TABLE_NAME, null, values)
+        db.close()
+        return result
+    }
+
+    fun getAllNotifications(): List<NotifItem> {
+        val notifications = mutableListOf<NotifItem>()
+        val db = this.readableDatabase
+        val cursor = db.rawQuery("SELECT * FROM $NOTIF_TABLE_NAME", null)
+        cursor?.use {
+            if (it.moveToFirst()) {
+                do {
+                    val message = it.getString(it.getColumnIndexOrThrow(NOTIF_COLUMN_MESSAGE))
+                    val timeInterval = it.getString(it.getColumnIndexOrThrow(NOTIF_COLUMN_TIME_INTERVAL))
+                    notifications.add(NotifItem(message, timeInterval))
+                } while (it.moveToNext())
+            }
+        }
+        db.close()
+        return notifications
     }
 }

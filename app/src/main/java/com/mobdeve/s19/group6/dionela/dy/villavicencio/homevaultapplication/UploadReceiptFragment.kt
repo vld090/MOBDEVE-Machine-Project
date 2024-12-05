@@ -108,7 +108,7 @@ class UploadReceiptFragment : Fragment() {
             walletDBHelper.insertWalletItem(newReceipt)
 
             val date = getCurrentDate()
-            val newActivity = HistoryItem("New Item: ", receiptName, date)
+            val newActivity = HistoryItem("New Receipt", receiptName, date)
             val historyDB = HistoryDBHelper(requireContext())
 
             historyDB.insertHistoryItem(newActivity)

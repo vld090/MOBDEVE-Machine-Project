@@ -64,7 +64,7 @@ class CameraFragment : Fragment() {
         binding.ibCamCapture.setOnClickListener {
             val photo = File(
                 requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
-                "${SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date())}.jpg"
+                "IMG_${System.currentTimeMillis()}.jpg"
             )
             val outputOptions = ImageCapture.OutputFileOptions.Builder(photo).build()
 

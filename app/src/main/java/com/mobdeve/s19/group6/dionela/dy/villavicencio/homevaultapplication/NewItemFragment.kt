@@ -64,7 +64,7 @@ class NewItemFragment : Fragment() {
 
             if (result != -1L) {
                 val date = getCurrentDate()
-                val newActivity = HistoryItem("New Item: ", itemName, date)
+                val newActivity = HistoryItem("New Item", itemName, date)
                 val historyDB = HistoryDBHelper(requireContext())
 
                 historyDB.insertHistoryItem(newActivity)

@@ -29,14 +29,6 @@ class ViewReceiptFragment : Fragment() {
         item = view.findViewById(R.id.tvAssoc_item)
         expDate = view.findViewById(R.id.tvExpDate)
 
-        parentFragmentManager.setFragmentResultListener("camera_result", viewLifecycleOwner) { _, bundle ->
-            val imageUri = bundle.getString("captured_image_uri")
-            if (imageUri != null) {
-                receipt.setImageURI(Uri.parse(imageUri))
-                receipt.tag = imageUri
-            }
-        }
-
         return view
     }
 

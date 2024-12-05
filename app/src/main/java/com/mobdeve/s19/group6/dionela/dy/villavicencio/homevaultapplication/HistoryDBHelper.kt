@@ -67,9 +67,9 @@ class HistoryDBHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         return historyItems
     }
 
-    fun deleteHistoryItem(item: String): Int {
+    fun deleteAllHistoryItems(): Int {
         val db = this.writableDatabase
-        val rowsDeleted = db.delete(TABLE_LOG_HISTORY, "$COLUMN_ITEM = ?", arrayOf(item))
+        val rowsDeleted = db.delete(TABLE_LOG_HISTORY, null, null)
         db.close()
         return rowsDeleted
     }

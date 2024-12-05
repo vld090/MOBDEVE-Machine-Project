@@ -51,7 +51,7 @@ class ItemAdapter(
                 itemStock.text = newStock.toString() // Reflect the change in UI
 
                 val date = getCurrentDate()
-                val newActivity = HistoryItem("Add Stock: ", item.itemName, date)
+                val newActivity = HistoryItem("Add Stock", item.itemName, date)
                 historyDBHelper.insertHistoryItem(newActivity)
 
                 Toast.makeText(itemView.context, "Stock added!", Toast.LENGTH_SHORT).show()
@@ -71,7 +71,7 @@ class ItemAdapter(
                     itemStock.text = newStock.toString() // Reflect the change in UI
 
                     val date = getCurrentDate()
-                    val newActivity = HistoryItem("Deduct Stock: ", item.itemName, date)
+                    val newActivity = HistoryItem("Deduct Stock", item.itemName, date)
                     historyDBHelper.insertHistoryItem(newActivity)
 
                     Toast.makeText(itemView.context, "Stock deducted!", Toast.LENGTH_SHORT).show()
@@ -106,7 +106,7 @@ class ItemAdapter(
                 notifyItemRemoved(position) // Update RecyclerView
 
                 val date = getCurrentDate()
-                val newActivity = HistoryItem("Delete Item: ", itemName.toString(), date)
+                val newActivity = HistoryItem("Delete Item", item.itemName, date)
                 historyDBHelper.insertHistoryItem(newActivity)
 
                 Toast.makeText(
